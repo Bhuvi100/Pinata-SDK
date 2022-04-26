@@ -74,7 +74,7 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
                     files.forEach((file) => {
                         //for each file stream, we need to include the correct relative file path
                         data.append('file', fs.createReadStream(file), {
-                            filepath: basePathConverter(sourcePath, file)
+                            filepath: file
                         });
                     });
 
