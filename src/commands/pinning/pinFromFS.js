@@ -17,7 +17,9 @@ const recursive = require('recursive-fs');
  */
 export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, options) {
     validateApiKeys(pinataApiKey, pinataSecretApiKey);
-
+    
+    console.log("Entered Pinning")
+    
     return new Promise((resolve, reject) => {
         const endpoint = `${baseUrl}/pinning/pinFileToIPFS`;
 
@@ -28,7 +30,7 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
             if (stats.isFile()) {
                 //we need to create a single read stream instead of reading the directory recursively
                 const data = new NodeFormData();
-
+                console.log("Entered Pinata 1")
                 data.append('file', fs.createReadStream(sourcePath));
 
                 if (options) {
@@ -64,6 +66,7 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
                     reject(formattedError);
                 });
             } else {
+                console.log("Entered Pinata 2")
                 recursive.readdirr(sourcePath, function (err, dirs, files) {
                     if (err) {
                         reject(new Error(err));
@@ -73,6 +76,7 @@ export default function pinFromFS(pinataApiKey, pinataSecretApiKey, sourcePath, 
 
                     files.forEach((file) => {
                         //for each file stream, we need to include the correct relative file path
+                        console.log(file, basePathConverter(sourcePath, file))
                         data.append('file', fs.createReadStream(file), {
                             filepath: file
                         });
